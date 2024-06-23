@@ -66,7 +66,7 @@ public class MessageDAO {
         try {
             //Write SQL logic here
             String sql = "INSERT INTO message(posted_by, message_text, time_posted_epoch) VALUES(?, ?, ?);" ;
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
             //write preparedStatement's setString and setInt methods here.
             preparedStatement.setInt(1, message.getPosted_by());
@@ -76,6 +76,7 @@ public class MessageDAO {
             preparedStatement.executeUpdate();
             ResultSet pkeyResultSet = preparedStatement.getGeneratedKeys();
             if(pkeyResultSet.next()){
+                System.out.println("Hello there");
                 int message_id = pkeyResultSet.getInt(1);
                 message.setMessage_id(message_id);
                 return message;
@@ -127,6 +128,7 @@ public class MessageDAO {
         }
     }
 
+    //Deletes message via message id
     public void deleteMessageByID(int message_id){
         Connection connection = ConnectionUtil.getConnection();
         try {
